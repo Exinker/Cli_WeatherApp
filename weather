@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+import sys
+
+from exceptions import GetLocationError, GetWeatherError, SaveWeatherError
+from history import save_history, PlainTextStorage
+from location_service import get_location, WhereAmILocationService
+from printer import print_weather
+from weather_service import get_weather, OpenWeatherMapWeatherService
+
+
+def main():
+
+    try:
+        location = get_location(
+            service=WhereAmILocationService(),
+        )
+    except GetLocationError:
+        print('Failed to get a location!')
+        sys.exit(1)
+
+    try:
+        weather = get_weather(
+            location=location,
+            service=OpenWeatherMapWeatherService(),
+        )
+    except GetWeatherError:
+        print(f'Failed to get a weather by {location}!')
+        sys.exit(1)
+
+    try:
+        save_history(
+            weather=weather,
+            storage=PlainTextStorage('history.txt'),
+        )
+    except SaveWeatherError:
+        print('Failed to save a weather!')
+
+    print_weather(weather)
+
+
+if __name__ == '__main__':
+    main()
