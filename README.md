@@ -8,7 +8,7 @@
 
 
 ## Utility
-To run as utility create a simbolic link by [ln utility](ln%20utility.md).
+To run as utility create a simbolic link by `ln` utility.
 ```
 sudo ln -s $(pwd)/weather /usr/local/bin/
 ```
